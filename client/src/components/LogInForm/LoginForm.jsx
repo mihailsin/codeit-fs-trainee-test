@@ -4,13 +4,11 @@ import * as yup from "yup";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { useNavigate } from "react-router-dom";
-
-const SignUpForm = () => {
+const LogInForm = () => {
   const navigate = useNavigate();
+
   const schema = yup.object().shape({
     email: yup.string().email().required("Email required!"),
     login: yup
@@ -18,29 +16,17 @@ const SignUpForm = () => {
       .required("Login required!")
       .min(6, "Login should be at least 6 charachters length")
       .max(20, "Login can not be longer than 20 charachters"),
-    realname: yup
-      .string()
-      .required("Name required!")
-      .min(3, "Name should be at least 3 charachters length")
-      .max(20, "Name can not be longer than 20 charachters"),
     password: yup
       .string()
       .required("Password required!")
       .min(6, "Password should be at least 6 charachters length")
       .max(20, "Password can not be longer than 20 charachters"),
-    birthdate: yup
-      .number()
-      .min(1900, "How does it come you still alive?")
-      .max(2020, "You did it accidentally, right kid?")
-      .required("Date of birth is required!"),
   });
   const formik = useFormik({
     initialValues: {
       email: "",
       login: "",
-      realname: "",
       password: "",
-      birthdate: "",
     },
     validationSchema: schema,
     onSubmit: (values, actions) => {
@@ -49,7 +35,7 @@ const SignUpForm = () => {
   });
   return (
     <>
-      <form action="register" onSubmit={formik.handleSubmit}>
+      <form action="login" onSubmit={formik.handleSubmit}>
         <Box
           sx={{
             display: "flex",
@@ -59,7 +45,7 @@ const SignUpForm = () => {
             marginTop: "20px",
           }}
         >
-          <h2>Register</h2>
+          <h2>Log In</h2>
           <TextField
             id="email"
             label="Email"
@@ -87,19 +73,6 @@ const SignUpForm = () => {
             sx={{ marginBottom: "10px" }}
           />
           <TextField
-            id="realname"
-            label="Real Name"
-            variant="outlined"
-            type="text"
-            name="realname"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.realname}
-            error={formik.touched.realname && Boolean(formik.errors.realname)}
-            helperText={formik.touched.realname && formik.errors.realname}
-            sx={{ marginBottom: "10px" }}
-          />
-          <TextField
             id="password"
             label="Password"
             variant="outlined"
@@ -112,24 +85,6 @@ const SignUpForm = () => {
             helperText={formik.touched.password && formik.errors.password}
             sx={{ marginBottom: "10px" }}
           />
-          <TextField
-            id="birthdate"
-            label="Date of Birth"
-            variant="outlined"
-            type="number"
-            name="birthdate"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.birthdate}
-            error={formik.touched.birthdate && Boolean(formik.errors.birthdate)}
-            helperText={formik.touched.birthdate && formik.errors.birthdate}
-            sx={{ marginBottom: "10px" }}
-          />
-          <FormControlLabel
-            control={<Checkbox id="check" name="agreed" required />}
-            label="I agree with terms and conditions"
-          />
-
           <ButtonGroup variant="contained" orientation="vertical">
             <Button
               type="submit"
@@ -137,16 +92,16 @@ const SignUpForm = () => {
               size="large"
               sx={{ marginTop: "10px" }}
             >
-              Sign Up!
+              Sign In!
             </Button>
             <Button
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/register")}
               type="button"
               variant="contained"
               size="large"
               sx={{ marginTop: "10px" }}
             >
-              I have an Account
+              Create Account
             </Button>
           </ButtonGroup>
         </Box>
@@ -154,4 +109,4 @@ const SignUpForm = () => {
     </>
   );
 };
-export default SignUpForm;
+export default LogInForm;
