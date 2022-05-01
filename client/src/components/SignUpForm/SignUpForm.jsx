@@ -1,6 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
-import * as yup from "yup";
+import { regisrationSchema } from "../../helpers/validationSchemas";
+import { authRequest } from "../../api/authRequests";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -9,31 +10,9 @@ import Checkbox from "@mui/material/Checkbox";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { useNavigate } from "react-router-dom";
 
-const SignUpForm = () => {
+const SignUpForm = ({ authorize }) => {
   const navigate = useNavigate();
-  const schema = yup.object().shape({
-    email: yup.string().email().required("Email required!"),
-    login: yup
-      .string()
-      .required("Login required!")
-      .min(6, "Login should be at least 6 charachters length")
-      .max(20, "Login can not be longer than 20 charachters"),
-    realname: yup
-      .string()
-      .required("Name required!")
-      .min(3, "Name should be at least 3 charachters length")
-      .max(20, "Name can not be longer than 20 charachters"),
-    password: yup
-      .string()
-      .required("Password required!")
-      .min(6, "Password should be at least 6 charachters length")
-      .max(20, "Password can not be longer than 20 charachters"),
-    birthdate: yup
-      .number()
-      .min(1900, "How does it come you still alive?")
-      .max(2020, "You did it accidentally, right kid?")
-      .required("Date of birth is required!"),
-  });
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -41,10 +20,17 @@ const SignUpForm = () => {
       realname: "",
       password: "",
       birthdate: "",
+      country: "",
     },
-    validationSchema: schema,
-    onSubmit: (values, actions) => {
+    validationSchema: regisrationSchema,
+    onSubmit: async (values, actions) => {
       alert(JSON.stringify(values, null, 2));
+      console.log(JSON.stringify(values));
+      if (await authRequest("register", values)) {
+        authorize(true);
+      } else {
+        console.log("error");
+      }
     },
   });
   return (
@@ -123,6 +109,19 @@ const SignUpForm = () => {
             value={formik.birthdate}
             error={formik.touched.birthdate && Boolean(formik.errors.birthdate)}
             helperText={formik.touched.birthdate && formik.errors.birthdate}
+            sx={{ marginBottom: "10px" }}
+          />
+          <TextField
+            id="country"
+            label="Country"
+            variant="outlined"
+            type="text"
+            name="country"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.country}
+            error={formik.touched.country && Boolean(formik.errors.country)}
+            helperText={formik.touched.country && formik.errors.country}
             sx={{ marginBottom: "10px" }}
           />
           <FormControlLabel

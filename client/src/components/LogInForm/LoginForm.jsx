@@ -1,36 +1,28 @@
 import React from "react";
 import { useFormik } from "formik";
-import * as yup from "yup";
+import { logInSchema } from "../../helpers/validationSchemas";
+import { authRequest } from "../../api/authRequests";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { useNavigate } from "react-router-dom";
-const LogInForm = () => {
+const LogInForm = ({ authorize }) => {
   const navigate = useNavigate();
 
-  const schema = yup.object().shape({
-    email: yup.string().email().required("Email required!"),
-    login: yup
-      .string()
-      .required("Login required!")
-      .min(6, "Login should be at least 6 charachters length")
-      .max(20, "Login can not be longer than 20 charachters"),
-    password: yup
-      .string()
-      .required("Password required!")
-      .min(6, "Password should be at least 6 charachters length")
-      .max(20, "Password can not be longer than 20 charachters"),
-  });
   const formik = useFormik({
     initialValues: {
       email: "",
-      login: "",
       password: "",
     },
-    validationSchema: schema,
-    onSubmit: (values, actions) => {
+    validationSchema: logInSchema,
+    onSubmit: async (values, actions) => {
       alert(JSON.stringify(values, null, 2));
+      if (await authRequest("login", values)) {
+        authorize(true);
+      } else {
+        console.log("error");
+      }
     },
   });
   return (
@@ -58,19 +50,6 @@ const LogInForm = () => {
             value={formik.email}
             error={formik.touched.email && Boolean(formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}
-          />
-          <TextField
-            id="login"
-            label="Login"
-            variant="outlined"
-            type="text"
-            name="login"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.login}
-            error={formik.touched.login && Boolean(formik.errors.login)}
-            helperText={formik.touched.login && formik.errors.login}
-            sx={{ marginBottom: "10px" }}
           />
           <TextField
             id="password"

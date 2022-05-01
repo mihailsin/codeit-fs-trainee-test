@@ -1,6 +1,6 @@
 import LogInForm from "../../components/LogInForm/LoginForm";
 
-const LogIn = () => {
-  return <LogInForm />;
+const LogIn = ({ authorize }) => {
+  return <LogInForm authorize={authorize} />;
 };
 export default LogIn;
