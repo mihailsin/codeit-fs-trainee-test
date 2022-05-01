@@ -13,7 +13,7 @@ const tokenValidation = require("../middleware/authorization");
 
 router.post("/register", registerValidation, async (req, res) => {
   try {
-    const { email, login, realname, password, birthdate } = req.body;
+    const { email, login, realname, password, birthdate, country } = req.body;
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     const encryptedPassword = await bcrypt.hash(password, salt);
@@ -24,8 +24,8 @@ router.post("/register", registerValidation, async (req, res) => {
       return res.status(401).send("User already exists");
     }
     const newUser = await pool.query(
-      "INSERT INTO users (email, login, realname, password, birthdate) VALUES ($1,$2,$3,$4,$5) RETURNING *",
-      [email, login, realname, encryptedPassword, birthdate]
+      "INSERT INTO users (email, login, realname, password, birthdate, country) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
+      [email, login, realname, encryptedPassword, birthdate, country]
     );
     const token = jwt(newUser.rows[0].user_id);
     return res.status(201).send({

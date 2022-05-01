@@ -22,6 +22,11 @@ const regisrationSchema = yup.object().shape({
     .min(1900, "How does it come you still alive?")
     .max(2020, "You did it accidentally, right kid?")
     .required("Date of birth is required!"),
+  country: yup
+    .string()
+    .required("Country required!")
+    .min(3, "Country should be at least 3 charachters length")
+    .max(20, "Country can not be longer than 20 charachters"),
 });
 
 const logInSchema = yup.object().shape({

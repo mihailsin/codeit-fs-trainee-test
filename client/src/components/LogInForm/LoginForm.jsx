@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import { logInSchema } from "../../helpers/validationSchemas";
-import authRequest from "../../api/authRequest";
+import { authRequest } from "../../api/authRequests";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";

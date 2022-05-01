@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import { regisrationSchema } from "../../helpers/validationSchemas";
-import authRequest from "../../api/authRequest";
+import { authRequest } from "../../api/authRequests";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -9,22 +9,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { useNavigate } from "react-router-dom";
-// import axios from "axios";
-// axios.defaults.baseURL = "http://localhost:3001";
-// axios.defaults.headers.post["Content-Type"] = "application/json";
-
-// const registerUser = async (user) => {
-//   await axios
-//     .post("/auth/register", {
-//       user,
-//     })
-//     .then(function (response) {
-//       console.log(response);
-//     })
-//     .catch(function (error) {
-//       console.log(error);
-//     });
-// };
 
 const SignUpForm = ({ authorize }) => {
   const navigate = useNavigate();
@@ -36,6 +20,7 @@ const SignUpForm = ({ authorize }) => {
       realname: "",
       password: "",
       birthdate: "",
+      country: "",
     },
     validationSchema: regisrationSchema,
     onSubmit: async (values, actions) => {
@@ -124,6 +109,19 @@ const SignUpForm = ({ authorize }) => {
             value={formik.birthdate}
             error={formik.touched.birthdate && Boolean(formik.errors.birthdate)}
             helperText={formik.touched.birthdate && formik.errors.birthdate}
+            sx={{ marginBottom: "10px" }}
+          />
+          <TextField
+            id="country"
+            label="Country"
+            variant="outlined"
+            type="text"
+            name="country"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.country}
+            error={formik.touched.country && Boolean(formik.errors.country)}
+            helperText={formik.touched.country && formik.errors.country}
             sx={{ marginBottom: "10px" }}
           />
           <FormControlLabel

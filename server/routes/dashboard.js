@@ -9,7 +9,7 @@ router.get("/", tokenValidation, async (req, res) => {
     const user = await pool.query("SELECT * FROM users WHERE user_id = $1", [
       req.user,
     ]);
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       code: 200,
       data: {

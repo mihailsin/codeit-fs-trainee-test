@@ -6,5 +6,6 @@ CREATE TABLE users(
     realname VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     birthdate SMALLINT,
-    regTimestamp TIMESTAMP
+    country VARCHAR(255) NOT NULL,
+    regtimestamp TIMESTAMPTZ DEFAULT Now()
 );
