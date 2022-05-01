@@ -28,7 +28,7 @@ router.post("/register", registerValidation, async (req, res) => {
       [email, login, realname, encryptedPassword, birthdate]
     );
     const token = jwt(newUser.rows[0].user_id);
-    res.status(201).json({
+    return res.status(201).send({
       status: "success",
       code: 201,
       data: {
@@ -61,7 +61,7 @@ router.post("/login", logInValidation, async (req, res) => {
     }
 
     const token = jwt(user.rows[0].user_id);
-    res.status(201).json({
+    return res.status(201).send({
       status: "success",
       code: 201,
       data: {
