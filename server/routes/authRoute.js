@@ -3,10 +3,15 @@ const router = express.Router();
 const pool = require("../database/db");
 const bcrypt = require("bcrypt");
 const jwt = require("../utils/jwtGenerator");
+const {
+  registerValidation,
+  logInValidation,
+} = require("../middleware/fieldsValidation");
+const tokenValidation = require("../middleware/authorization");
 
 // REGISTER
 
-router.post("/register", async (req, res) => {
+router.post("/register", registerValidation, async (req, res) => {
   try {
     const { email, login, realname, password, birthdate } = req.body;
     const saltRounds = 10;
@@ -39,7 +44,7 @@ router.post("/register", async (req, res) => {
 
 //LOG IN
 
-router.post("/login", async (req, res) => {
+router.post("/login", logInValidation, async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await pool.query("SELECT * FROM users WHERE email = $1", [
@@ -64,6 +69,17 @@ router.post("/login", async (req, res) => {
         token,
       },
     });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error");
+  }
+});
+
+// CHECK ISLOGGEDIN
+
+router.get("/verify", tokenValidation, async (req, res) => {
+  try {
+    res.send(true);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error");
