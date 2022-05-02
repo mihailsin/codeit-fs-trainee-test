@@ -17,18 +17,24 @@ router.post("/register", registerValidation, async (req, res) => {
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     const encryptedPassword = await bcrypt.hash(password, salt);
-    const user = await pool.query("SELECT * FROM users WHERE email = $1", [
+    const userMail = await pool.query("SELECT * FROM users WHERE email = $1", [
       email,
     ]);
-    if (user.rows.length !== 0) {
-      return res.status(401).send("User already exists");
+    if (userMail.rows.length !== 0) {
+      return res.status(401).json("Entered email is taken");
+    }
+    const userLogin = await pool.query("SELECT * FROM users WHERE login = $1", [
+      login,
+    ]);
+    if (userLogin.rows.length !== 0) {
+      return res.status(401).json("Entered login is taken");
     }
     const newUser = await pool.query(
       "INSERT INTO users (email, login, realname, password, birthdate, country) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
       [email, login, realname, encryptedPassword, birthdate, country]
     );
     const token = jwt(newUser.rows[0].user_id);
-    return res.status(201).send({
+    return res.status(201).json({
       status: "success",
       code: 201,
       data: {
@@ -38,7 +44,7 @@ router.post("/register", registerValidation, async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error");
+    res.status(500).json("Error");
   }
 });
 
@@ -52,16 +58,16 @@ router.post("/login", logInValidation, async (req, res) => {
     ]);
 
     if (user.rows.length === 0) {
-      return res.status(401).send("Entered email or password incorrect");
+      return res.status(401).json("Entered email is incorrect");
     }
 
     const validPassword = await bcrypt.compare(password, user.rows[0].password);
     if (!validPassword) {
-      return res.status(401).send("Entered email or password incorrect");
+      return res.status(401).json("Entered password is incorrect");
     }
 
     const token = jwt(user.rows[0].user_id);
-    return res.status(201).send({
+    return res.status(201).json({
       status: "success",
       code: 201,
       data: {
@@ -79,7 +85,7 @@ router.post("/login", logInValidation, async (req, res) => {
 
 router.get("/verify", tokenValidation, async (req, res) => {
   try {
-    res.send(true);
+    res.json(true);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error");

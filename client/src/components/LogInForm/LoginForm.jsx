@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import { logInSchema } from "../../helpers/validationSchemas";
-import { authRequest } from "../../api/authRequests";
+import { authRequest } from "../../api/auth";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -17,11 +17,8 @@ const LogInForm = ({ authorize }) => {
     },
     validationSchema: logInSchema,
     onSubmit: async (values, actions) => {
-      alert(JSON.stringify(values, null, 2));
       if (await authRequest("login", values)) {
         authorize(true);
-      } else {
-        console.log("error");
       }
     },
   });

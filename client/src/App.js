@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import DashboardView from "./Views/DashboardView";
 import Register from "./Views/Register";
 import LogIn from "./Views/LogIn";
-import { validateTokenRequest } from "./api/authRequests";
+import { validateTokenRequest } from "./api/auth";
 import { Routes, Route, Navigate } from "react-router-dom";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
