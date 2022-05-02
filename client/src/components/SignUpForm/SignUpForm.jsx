@@ -33,9 +33,11 @@ const SignUpForm = ({ authorize }) => {
       country: "",
     },
     validationSchema: regisrationSchema,
-    onSubmit: async (values, actions) => {
+    onSubmit: async (values) => {
       if (await authRequest("register", values)) {
         authorize(true);
+      } else {
+        authorize(false);
       }
     },
   });
@@ -106,7 +108,7 @@ const SignUpForm = ({ authorize }) => {
           />
           <TextField
             id="birthdate"
-            label="Date of Birth"
+            label="Year of Birth"
             variant="outlined"
             type="number"
             name="birthdate"

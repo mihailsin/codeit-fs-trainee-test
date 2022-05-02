@@ -16,9 +16,11 @@ const LogInForm = ({ authorize }) => {
       password: "",
     },
     validationSchema: logInSchema,
-    onSubmit: async (values, actions) => {
+    onSubmit: async (values) => {
       if (await authRequest("login", values)) {
         authorize(true);
+      } else {
+        authorize(false);
       }
     },
   });

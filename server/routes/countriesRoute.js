@@ -1,15 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const pool = require("../database/db");
+const countriesController = require("../controllers/countriesController");
 
-router.get("/", async (req, res) => {
-  try {
-    const countries = await pool.query("SELECT * FROM country");
-    res.status(200).json(countries.rows);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error");
-  }
-});
+//get countries list
+
+router.get("/", countriesController);
 
 module.exports = router;
