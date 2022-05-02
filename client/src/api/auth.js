@@ -1,4 +1,4 @@
-const authRequest = async (endpoint, body) => {
+const authRequest = async (endpoint, body, location) => {
   try {
     const response = await fetch(`/auth/${endpoint}`, {
       method: "POST",
@@ -14,6 +14,7 @@ const authRequest = async (endpoint, body) => {
     } else {
       alert(`Error! ${data}`);
     }
+    window.location = `${location}`;
   } catch (error) {
     console.error(error);
   }

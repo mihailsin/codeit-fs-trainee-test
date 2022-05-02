@@ -34,7 +34,7 @@ const SignUpForm = ({ authorize }) => {
     },
     validationSchema: regisrationSchema,
     onSubmit: async (values, actions) => {
-      if (await authRequest("register", values)) {
+      if (await authRequest("register", values, "/register")) {
         authorize(true);
       }
     },
