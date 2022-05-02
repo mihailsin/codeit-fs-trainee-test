@@ -13,11 +13,11 @@ app.use("/dashboard", dashboardRouter);
 app.use("/auth", authRouter);
 app.use("/countries", countriesRouter);
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/client/build")));
-  console.log(path.join(__dirname, "/client/build"));
-}
-console.log(path.join(__dirname, "/client/build"));
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "/client/build")));
+//   console.log(path.join(__dirname, "/client/build"));
+// }
+// console.log(path.join(__dirname, "/client/build"));
 app.listen(PORT, () => {
   console.log(`server is running on ${PORT}`);
 });

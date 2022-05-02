@@ -8,6 +8,9 @@ const productionConfig = process.env.DATABASE_URL;
 const pool = new Pool({
   connectionString:
     process.env.NODE_ENV === "production" ? productionConfig : devConfig,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 module.exports = pool;

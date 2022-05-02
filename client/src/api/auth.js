@@ -1,10 +1,13 @@
-const authRequest = async (endpoint, body, location) => {
+const authRequest = async (endpoint, body) => {
   try {
-    const response = await fetch(`/auth/${endpoint}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    const response = await fetch(
+      `https://code-it-fs-test-msin.herokuapp.com/auth/${endpoint}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      }
+    );
     const data = await response.json();
     const token = data.data?.token;
     if (token) {
@@ -14,7 +17,6 @@ const authRequest = async (endpoint, body, location) => {
     } else {
       alert(`Error! ${data}`);
     }
-    window.location = `${location}`;
   } catch (error) {
     console.error(error);
   }
@@ -22,10 +24,13 @@ const authRequest = async (endpoint, body, location) => {
 
 const validateUserRequest = async () => {
   try {
-    const response = await fetch(`/dashboard`, {
-      method: "GET",
-      headers: { token: localStorage.token },
-    });
+    const response = await fetch(
+      `https://code-it-fs-test-msin.herokuapp.com/dashboard`,
+      {
+        method: "GET",
+        headers: { token: localStorage.token },
+      }
+    );
     const data = await response.json();
     const user = data.data.result;
     return user;
@@ -37,10 +42,13 @@ const validateUserRequest = async () => {
 const validateTokenRequest = async () => {
   if (!localStorage.token) return false;
   try {
-    const response = await fetch(`/auth/verify`, {
-      method: "GET",
-      headers: { token: localStorage.token },
-    });
+    const response = await fetch(
+      `https://code-it-fs-test-msin.herokuapp.com/auth/verify`,
+      {
+        method: "GET",
+        headers: { token: localStorage.token },
+      }
+    );
     const tokenIsValid = await response.json();
     return tokenIsValid;
   } catch (error) {

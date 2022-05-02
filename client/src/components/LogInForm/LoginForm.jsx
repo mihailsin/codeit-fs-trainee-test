@@ -17,7 +17,7 @@ const LogInForm = ({ authorize }) => {
     },
     validationSchema: logInSchema,
     onSubmit: async (values, actions) => {
-      if (await authRequest("login", values, "/login")) {
+      if (await authRequest("login", values)) {
         authorize(true);
       }
     },
