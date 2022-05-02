@@ -1,6 +1,6 @@
 export const getCountriesList = async () => {
   try {
-    const response = await fetch("http://localhost:3001/countries", {
+    const response = await fetch("/countries", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });

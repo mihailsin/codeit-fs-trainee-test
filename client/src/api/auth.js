@@ -1,6 +1,6 @@
 const authRequest = async (endpoint, body) => {
   try {
-    const response = await fetch(`http://localhost:3001/auth/${endpoint}`, {
+    const response = await fetch(`/auth/${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -21,7 +21,7 @@ const authRequest = async (endpoint, body) => {
 
 const validateUserRequest = async () => {
   try {
-    const response = await fetch(`http://localhost:3001/dashboard`, {
+    const response = await fetch(`/dashboard`, {
       method: "GET",
       headers: { token: localStorage.token },
     });
@@ -36,7 +36,7 @@ const validateUserRequest = async () => {
 const validateTokenRequest = async () => {
   if (!localStorage.token) return false;
   try {
-    const response = await fetch("http://localhost:3001/auth/verify", {
+    const response = await fetch(`/auth/verify`, {
       method: "GET",
       headers: { token: localStorage.token },
     });
