@@ -1,17 +1,27 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { regisrationSchema } from "../../helpers/validationSchemas";
-import { authRequest } from "../../api/authRequests";
+import { authRequest } from "../../api/auth";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { getCountriesList } from "../../api/countries";
 import { useNavigate } from "react-router-dom";
 
 const SignUpForm = ({ authorize }) => {
   const navigate = useNavigate();
+  const [countries, setCountries] = useState(null);
+  useEffect(() => {
+    getCountriesList().then((data) => setCountries(data));
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -24,12 +34,8 @@ const SignUpForm = ({ authorize }) => {
     },
     validationSchema: regisrationSchema,
     onSubmit: async (values, actions) => {
-      alert(JSON.stringify(values, null, 2));
-      console.log(JSON.stringify(values));
       if (await authRequest("register", values)) {
         authorize(true);
-      } else {
-        console.log("error");
       }
     },
   });
@@ -111,19 +117,32 @@ const SignUpForm = ({ authorize }) => {
             helperText={formik.touched.birthdate && formik.errors.birthdate}
             sx={{ marginBottom: "10px" }}
           />
-          <TextField
-            id="country"
-            label="Country"
-            variant="outlined"
-            type="text"
-            name="country"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.country}
-            error={formik.touched.country && Boolean(formik.errors.country)}
-            helperText={formik.touched.country && formik.errors.country}
-            sx={{ marginBottom: "10px" }}
-          />
+          <FormControl>
+            <InputLabel id="country">Country</InputLabel>
+            <Select
+              sx={{ width: "240px", marginBottom: "10px" }}
+              labelId="country"
+              id="country"
+              required
+              defaultValue=""
+              label="Country"
+              name="country"
+              onChange={formik.handleChange}
+            >
+              {countries?.map((country, idx) => {
+                return (
+                  <MenuItem
+                    key={idx}
+                    sx={{ maxWidth: "240px" }}
+                    value={country}
+                  >
+                    {country}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+
           <FormControlLabel
             control={<Checkbox id="check" name="agreed" required />}
             label="I agree with terms and conditions"

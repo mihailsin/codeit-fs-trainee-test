@@ -5,11 +5,15 @@ const authRequest = async (endpoint, body) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-    const result = await response.json();
-    const token = result.data.token;
-    console.log(token);
-    localStorage.setItem("token", token);
-    return token;
+    const data = await response.json();
+    const token = data.data?.token;
+    if (token) {
+      localStorage.setItem("token", token);
+      alert("Successfully logged in!");
+      return token;
+    } else {
+      alert(`Error! ${data}`);
+    }
   } catch (error) {
     console.error(error);
   }
@@ -23,7 +27,6 @@ const validateUserRequest = async () => {
     });
     const data = await response.json();
     const user = data.data.result;
-    console.log(user);
     return user;
   } catch (error) {
     console.error(error);
@@ -38,7 +41,6 @@ const validateTokenRequest = async () => {
       headers: { token: localStorage.token },
     });
     const tokenIsValid = await response.json();
-    console.log(tokenIsValid);
     return tokenIsValid;
   } catch (error) {
     console.error(error);

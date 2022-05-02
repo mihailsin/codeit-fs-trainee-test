@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { validateUserRequest } from "../../api/authRequests";
+import { validateUserRequest } from "../../api/auth";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
