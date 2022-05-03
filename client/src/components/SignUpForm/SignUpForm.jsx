@@ -122,7 +122,7 @@ const SignUpForm = ({ authorize }) => {
           <FormControl>
             <InputLabel id="country">Country</InputLabel>
             <Select
-              sx={{ width: "240px", marginBottom: "10px" }}
+              sx={{ minWidth: "200px", marginBottom: "10px" }}
               labelId="country"
               id="country"
               required
