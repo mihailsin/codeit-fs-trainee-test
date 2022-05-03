@@ -1,9 +1,8 @@
-const pool = require("../database/db");
-
+const { getCountriesQuery } = require("../database/dbQueries");
 const countriesController = async (req, res) => {
   try {
-    const countries = await pool.query("SELECT * FROM country");
-    res.status(200).json(countries.rows);
+    const countries = await getCountriesQuery();
+    return res.status(200).json(countries.rows);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error");

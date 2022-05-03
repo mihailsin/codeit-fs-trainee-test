@@ -1,9 +1,7 @@
-const pool = require("../database/db");
+const { userIdQuery } = require("../database/dbQueries");
 const validateTokenController = async (req, res) => {
   try {
-    const user = await pool.query("SELECT * FROM users WHERE user_id = $1", [
-      req.user,
-    ]);
+    const user = await userIdQuery(req.user);
     return res.status(200).json({
       status: "success",
       code: 200,

@@ -1,4 +1,4 @@
-const { Pool, Client } = require("pg");
+const { Pool } = require("pg");
 require("dotenv").config();
 
 const devConfig = `postgresql://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}:${process.env.PORT}/${process.env.DATABASE}`;

@@ -1,6 +1,10 @@
-const pool = require("../database/db");
 const bcrypt = require("bcrypt");
 const jwt = require("../utils/jwtGenerator");
+const {
+  userMailQuery,
+  userLoginQuery,
+  addUserQuery,
+} = require("../database/dbQueries");
 
 const registerUserController = async (req, res) => {
   try {
@@ -8,21 +12,21 @@ const registerUserController = async (req, res) => {
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     const encryptedPassword = await bcrypt.hash(password, salt);
-    const userMail = await pool.query("SELECT * FROM users WHERE email = $1", [
-      email,
-    ]);
+    const userMail = await userMailQuery(email);
     if (userMail.rows.length !== 0) {
       return res.status(401).json("Entered email is taken");
     }
-    const userLogin = await pool.query("SELECT * FROM users WHERE login = $1", [
-      login,
-    ]);
+    const userLogin = await userLoginQuery(login);
     if (userLogin.rows.length !== 0) {
       return res.status(401).json("Entered login is taken");
     }
-    const newUser = await pool.query(
-      "INSERT INTO users (email, login, realname, password, birthdate, country) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",
-      [email, login, realname, encryptedPassword, birthdate, country]
+    const newUser = await addUserQuery(
+      email,
+      login,
+      realname,
+      encryptedPassword,
+      birthdate,
+      country
     );
     const token = jwt(newUser.rows[0].user_id);
     return res.status(201).json({
@@ -42,9 +46,7 @@ const registerUserController = async (req, res) => {
 const loginUserController = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await pool.query("SELECT * FROM users WHERE email = $1", [
-      email,
-    ]);
+    const user = await userMailQuery(email);
 
     if (user.rows.length === 0) {
       return res.status(401).json("Entered email is incorrect");
